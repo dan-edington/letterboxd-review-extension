@@ -1,0 +1,6 @@
+#__LETTERBOXD_REVIEW_EXTENSION__-button-container {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+	padding-block-start: 5px;
+}
