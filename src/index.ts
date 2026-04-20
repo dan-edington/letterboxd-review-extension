@@ -1,23 +1,18 @@
-import { addTextStyleButtons, removeTextStyleButtons } from './domFunctions';
+import { addTextStyleButtons, removeAllButtons } from './domFunctions';
 import { initAutoSave } from './autosave';
 
 const reviewModal = document.getElementById('diary-entry-form-modal');
 
 if (reviewModal) {
-	const observerConfig = { attributes: true, attributeFilter: ['aria-hidden'] };
-
-	function reviewModalMutationCallback(
-		mutationList: MutationRecord[],
-		observer: MutationObserver
-	) {
+	function reviewModalMutationCallback(mutationList: MutationRecord[]) {
 		mutationList.forEach((mutation) => {
 			if (
 				mutation.target instanceof HTMLElement &&
 				mutation.target.ariaHidden === 'true'
 			) {
-				removeTextStyleButtons();
+				removeAllButtons();
 			} else {
-				if (reviewModal) {
+				if (reviewModal instanceof HTMLElement) {
 					addTextStyleButtons(reviewModal);
 					initAutoSave(reviewModal);
 				}
@@ -25,7 +20,10 @@ if (reviewModal) {
 		});
 	}
 
-	const observer = new MutationObserver(reviewModalMutationCallback);
+	const reviewModalObserver = new MutationObserver(reviewModalMutationCallback);
 
-	observer.observe(reviewModal, observerConfig);
+	reviewModalObserver.observe(reviewModal, {
+		attributes: true,
+		attributeFilter: ['aria-hidden'],
+	});
 }
