@@ -5,26 +5,30 @@ const prefix = '__LETTERBOXD_REVIEW_EXTENSION__';
 const maxFilmSlugTries = 50;
 
 function addTextStyleButtons(reviewModal: HTMLElement) {
-	if (reviewModal) {
-		const reviewTextAreaContainer = reviewModal.querySelector(
-			'.modal-content .modal-body > form .body .reviewfields'
-		);
-
-		if (reviewTextAreaContainer) {
-			const buttonContainer = document.createElement('div');
-			buttonContainer.id = `${prefix}-button-container`;
-			reviewTextAreaContainer.appendChild(buttonContainer);
-
-			const boldButton = new TextStyleButton('B', 'strong', buttonContainer);
-			const italicButton = new TextStyleButton('I', 'em', buttonContainer);
-			const blockQuoteButton = new TextStyleButton(
-				'Quote',
-				'blockquote',
-				buttonContainer
-			);
-			const hrefButton = new TextStyleButton('Link', 'a', buttonContainer);
-		}
+	if (!reviewModal) {
+		return;
 	}
+
+	const reviewTextAreaContainer = reviewModal.querySelector(
+		'.modal-content .modal-body > form .body .reviewfields'
+	);
+
+	if (!reviewTextAreaContainer) {
+		return;
+	}
+
+	if (reviewTextAreaContainer.querySelector(`#${prefix}-button-container`)) {
+		return;
+	}
+
+	const buttonContainer = document.createElement('div');
+	buttonContainer.id = `${prefix}-button-container`;
+	reviewTextAreaContainer.appendChild(buttonContainer);
+
+	new TextStyleButton('B', 'strong', buttonContainer);
+	new TextStyleButton('I', 'em', buttonContainer);
+	new TextStyleButton('Quote', 'blockquote', buttonContainer);
+	new TextStyleButton('Link', 'a', buttonContainer);
 }
 
 function addReviewButton(reviewModal: HTMLElement, filmSlug: string) {
